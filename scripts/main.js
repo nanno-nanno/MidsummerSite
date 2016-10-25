@@ -43,6 +43,7 @@ $(document).ready(function(){
             var current = contestants[i];
             $("#boardTbody").append(
                 "<tr>" +
+                    "<td><strong>" + (i + 1) + "</strong></td>" +
                     "<td>" + current.name + "</td>" +
                     "<td>" + current.score1 + "</td>" +
                     "<td>" + current.score2 + "</td>" +
