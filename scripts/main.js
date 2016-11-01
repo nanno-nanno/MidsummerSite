@@ -1,39 +1,60 @@
 /*jslint browser: true*/
 /*global $*/
 $(document).ready(function(){
+    
+    function Contestant(cname) {
+        this.name = cname;
+        this.score1 = 0;
+        this.score2 = 0;
+        this.score3 = 0;
+    }
+
+    Contestant.prototype.total = function() {
+        return this.score1 + this.score2 + this.score3;
+    };
+    
+    var contestants = [new Contestant("Pappa"),
+                       new Contestant("Mamma"),
+                       new Contestant("Natanael"),
+                       new Contestant("Jonah"),
+                       new Contestant("Uffe"),
+                       new Contestant("Bosse"),
+                       new Contestant("Thomas"),
+                       new Contestant("Kaija"),
+                       new Contestant("Maria"),
+                       new Contestant("Kicki"),
+                       new Contestant("Hasse"),
+                       new Contestant("Annica")];
+    
     displayContestants();
     
-    function newContestant(cname, cscore1, cscore2, cscore3) {
-        return {
-            name: cname,
-            score1: cscore1,
-            score2: cscore2,
-            score3: cscore3,
-            total: function() {
-                return this.score1 + this.score2 + this.score3;
-            }
-        };
-    }
+    $("#test").click(function openDialog() {
+        prompt("Score");
+    ***REMOVED***
     
     $("#boardButton").click(function() {
         displayContestants();
     ***REMOVED***
     
+    var eventCell;
+      
+    $(".cell").click(function(event) {
+        $("#myModal").modal('toggle');
+        eventCell = event.target;
+    ***REMOVED***
+    
+    $("#enterScore").click(function() {
+        // CONTINUE HERE! MAKE THIS DYNAMIC AND SET THE RIGHT SCORE TO THE RIGHT CONTESTANT!
+        var enteredScore = $("#scoreInput").val();
+        var candidates = contestants.filter(function(c) {
+            return c.name === "Natanael";
+        ***REMOVED***
+        var candidate = candidates[0];
+        candidate.score1 = enteredScore;
+    ***REMOVED***
+    
     function displayContestants() {
         $("#boardTbody").empty();
-        
-        var contestants = [newContestant("Pappa", 0, 0, 0),
-                           newContestant("Mamma", 0, 0, 0),
-                           newContestant("Natanael", 4, 2, 1),
-                           newContestant("Jonah", 3, 4, 1),
-                           newContestant("Uffe", 0, 0, 0),
-                           newContestant("Bosse", 0, 0, 0),
-                           newContestant("Thomas", 0, 0, 0),
-                           newContestant("Kaija", 0, 0, 0),
-                           newContestant("Maria", 0, 0, 0),
-                           newContestant("Kicki", 0, 0, 0),
-                           newContestant("Hasse", 0, 0, 0),
-                           newContestant("Annica", 0, 0, 0)];
         
         // contestants = shuffle(contestants);
         contestants.sort(compareTotal);
@@ -43,11 +64,11 @@ $(document).ready(function(){
             var current = contestants[i];
             $("#boardTbody").append(
                 "<tr>" +
-                    "<td><strong>" + (i + 1) + "</strong></td>" +
+                    "<td ><strong>" + (i + 1) + "</strong></td>" +
                     "<td>" + current.name + "</td>" +
-                    "<td>" + current.score1 + "</td>" +
-                    "<td>" + current.score2 + "</td>" +
-                    "<td>" + current.score3 + "</td>" +
+                    "<td class='cell'>" + current.score1 + "</td>" +
+                    "<td class='cell'>" + current.score2 + "</td>" +
+                    "<td class='cell'>" + current.score3 + "</td>" +
                     "<td>" + current.total() + "</td>" +
                 "</tr>"
             );
