@@ -10,7 +10,7 @@ $(document).ready(function(){
     }
 
     Contestant.prototype.total = function() {
-        return this.score1 + this.score2 + this.score3;
+        return Number(this.score1) + Number(this.score2) + Number(this.score3);
     };
     
     var contestants = [new Contestant("Pappa"),
@@ -27,30 +27,48 @@ $(document).ready(function(){
                        new Contestant("Annica")];
     
     displayContestants();
-    
-    $("#test").click(function openDialog() {
-        prompt("Score");
-    ***REMOVED***
-    
+
     $("#boardButton").click(function() {
         displayContestants();
     ***REMOVED***
     
     var eventCell;
-      
-    $(".cell").click(function(event) {
+    var clickedCellName;
+    var clickedCellNumber;
+    
+    $("#myModal").on("shown.bs.modal", function() {
+        $("#scoreInput").val('');
+        $("#scoreInput").focus();
+    ***REMOVED***
+
+    $(document).on("click", ".cell1, .cell2, .cell3", function(event) {
         $("#myModal").modal('toggle');
+        clickedCellName = $(this).attr('name');
+        clickedCellNumber = $(this).attr('class');
         eventCell = event.target;
     ***REMOVED***
     
     $("#enterScore").click(function() {
-        // CONTINUE HERE! MAKE THIS DYNAMIC AND SET THE RIGHT SCORE TO THE RIGHT CONTESTANT!
         var enteredScore = $("#scoreInput").val();
+        if (!enteredScore) {
+            enteredScore = "0";
+        }
         var candidates = contestants.filter(function(c) {
-            return c.name === "Natanael";
+            return c.name === clickedCellName;
         ***REMOVED***
         var candidate = candidates[0];
-        candidate.score1 = enteredScore;
+        switch(clickedCellNumber) {
+            case "cell1":
+                candidate.score1 = enteredScore;
+                break;
+            case "cell2":
+                candidate.score2 = enteredScore;
+                break;
+            case "cell3":
+                candidate.score3 = enteredScore;
+                break;
+        }
+        displayContestants();
     ***REMOVED***
     
     function displayContestants() {
@@ -66,9 +84,9 @@ $(document).ready(function(){
                 "<tr>" +
                     "<td ><strong>" + (i + 1) + "</strong></td>" +
                     "<td>" + current.name + "</td>" +
-                    "<td class='cell'>" + current.score1 + "</td>" +
-                    "<td class='cell'>" + current.score2 + "</td>" +
-                    "<td class='cell'>" + current.score3 + "</td>" +
+                    "<td class='cell1' name='" + current.name + "'>" + current.score1 + "</td>" +
+                    "<td class='cell2' name='" + current.name + "'>" + current.score2 + "</td>" +
+                    "<td class='cell3' name='" + current.name + "'>" + current.score3 + "</td>" +
                     "<td>" + current.total() + "</td>" +
                 "</tr>"
             );
