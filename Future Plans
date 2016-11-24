@@ -1,8 +1,6 @@
 FUTURE PLANS
 
 - Implement shadowing of rows (so we can show placements one at a time)
-- Make modal appear above selected score
-- Make modal look nicer
 - Extra stuffs:
-    - Skip modal, make cell editable
+    - Skip popover, make cell editable
     - Make it look nicer on mobile
