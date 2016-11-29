@@ -1,6 +1,7 @@
 FUTURE PLANS
 
+- Make use of a node.js server - http://techslides.com/client-side-javascript-to-node-js
 - Implement shadowing of rows (so we can show placements one at a time)
 - Extra stuffs:
     - Skip popover, make cell editable
-    - Make it look nicer on mobile
+    - Make it look nicer on mobile (freaking overflow title bastard)
