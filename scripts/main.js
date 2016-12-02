@@ -7,11 +7,10 @@ $(document).ready(function(){
         this.score1 = 0;
         this.score2 = 0;
         this.score3 = 0;
+        this.total = function() {
+            return Number(this.score1) + Number(this.score2) + Number(this.score3);
+        };
     }
-
-    Contestant.prototype.total = function() {
-        return Number(this.score1) + Number(this.score2) + Number(this.score3);
-    };
     
     var contestants = [new Contestant("Pappa"),
                        new Contestant("Mamma"),
@@ -38,11 +37,11 @@ $(document).ready(function(){
             clickedCellNumber = $(this).attr('class');
             return $('#popover-content').html();
         }
-    ***REMOVED***
+    });
     
     $(document).on("click", ".cell1, .cell2, .cell3", function() {
         showPopover();
-    ***REMOVED***
+    });
     
     function showPopover() {
         var popOver = $("[data-toggle=popover]").popover({
@@ -52,7 +51,7 @@ $(document).ready(function(){
                 clickedCellNumber = $(this).attr('class');    
                 return $('#popover-content').html();
             }
-        ***REMOVED***
+        });
         
         $(".popover-content").find("button").click(submitPopOver);
     }
@@ -65,7 +64,7 @@ $(document).ready(function(){
         }
         var candidates = contestants.filter(function(c) {
             return c.name === clickedCellName;
-        ***REMOVED***
+        });
         var candidate = candidates[0];
         switch(clickedCellNumber) {
             case "cell1":
@@ -122,6 +121,6 @@ $(document).ready(function(){
             && $(e.target).parents('.popover.in').length === 0) { 
             $('[data-toggle="popover"]').popover('hide');
         }
-    ***REMOVED***
+    });
 
-***REMOVED***
+});
