@@ -1,6 +1,6 @@
 FUTURE PLANS
 
-- Make use of a node.js server - http://techslides.com/client-side-javascript-to-node-js
+- Do useful things the database response
 - Implement shadowing of rows (so we can show placements one at a time)
 - Extra stuffs:
     - Skip popover, make cell editable
