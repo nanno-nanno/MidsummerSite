@@ -2,6 +2,17 @@
 /*global $*/
 $(document).ready(function(){
     
+    // MOVE ALL THIS SOMEWHERE WHERE IT BELONGS!
+    var callback = function(data) {
+        console.log(data);
+        // Continue here. It seems data is already an array of contestants
+        // and does need to be parsed any further. Can only be tested in
+        // normal Chrome browser as it needs the plugin "CORS".
+    }
+    
+    $.post("http://localhost:8000", "SELECT name, score1, score2, score3 FROM contestants", callback, "json");
+    // MOVE!! DAMMIT! --------------------------
+    
     function Contestant(cname) {
         this.name = cname;
         this.score1 = 0;
