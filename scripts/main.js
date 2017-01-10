@@ -2,39 +2,47 @@
 /*global $*/
 $(document).ready(function(){
     
-    // MOVE ALL THIS SOMEWHERE WHERE IT BELONGS!
-    var callback = function(data) {
-        console.log(data);
-        // Continue here. It seems data is already an array of contestants
-        // and does need to be parsed any further. Can only be tested in
-        // normal Chrome browser as it needs the plugin "CORS".
-    }
-    
-    $.post("http://localhost:8000", "SELECT name, score1, score2, score3 FROM contestants", callback, "json");
-    // MOVE!! DAMMIT! --------------------------
-    
-    function Contestant(cname) {
+    function Contestant(cname, cscore1, cscore2, cscore3) {
         this.name = cname;
-        this.score1 = 0;
-        this.score2 = 0;
-        this.score3 = 0;
+        this.score1 = cscore1;
+        this.score2 = cscore2;
+        this.score3 = cscore3;
         this.total = function() {
             return Number(this.score1) + Number(this.score2) + Number(this.score3);
         };
     }
     
-    var contestants = [new Contestant("Pappa"),
-                       new Contestant("Mamma"),
-                       new Contestant("Natanael"),
-                       new Contestant("Jonah"),
-                       new Contestant("Uffe"),
-                       new Contestant("Bosse"),
-                       new Contestant("Thomas"),
-                       new Contestant("Kaija"),
-                       new Contestant("Maria"),
-                       new Contestant("Kicki"),
-                       new Contestant("Hasse"),
-                       new Contestant("Annica")];
+    var contestants = [];
+
+    var callback = function(data) {
+        contestants = [];
+        for (index in data) {
+            var current = data[index];
+            contestants.push(
+                new Contestant(
+                    current.name,
+                    current.score1,
+                    current.score2,
+                    current.score3));
+        }
+        
+        contestants.sort(compareTotal);
+        contestants.reverse();
+        
+        for (i = 0; i < contestants.length; i++) {
+            var current = contestants[i];
+            $("#boardTbody").append(
+                $("<tr>" +
+                    "<td ><strong>" + (i + 1) + "</strong></td>" +
+                    "<td>" + current.name + "</td>" +
+                    "<td class='cell1' name='" + current.name + "' data-placement='bottom' data-toggle='popover' data-container='body' data-html='true'>" + current.score1 + "</td>" +
+                    "<td class='cell2' name='" + current.name + "' data-placement='bottom' data-toggle='popover' data-container='body' data-html='true'>" + current.score2 + "</td>" +
+                    "<td class='cell3' name='" + current.name + "' data-placement='bottom' data-toggle='popover' data-container='body' data-html='true'>" + current.score3 + "</td>" +
+                    "<td>" + current.total() + "</td>" +
+                "</tr>")
+            );
+        }
+    }
     
     displayContestants();
 
@@ -69,7 +77,6 @@ $(document).ready(function(){
     
     function submitPopOver(e) {
         var enteredScore = $(".popover-content #scoreInput").val();
-        console.log(enteredScore);
         if (!enteredScore) {
             enteredScore = "0";
         }
@@ -79,13 +86,13 @@ $(document).ready(function(){
         var candidate = candidates[0];
         switch(clickedCellNumber) {
             case "cell1":
-                candidate.score1 = enteredScore;
+                $.post("http://localhost:8000", "UPDATE contestants SET score1 = " + enteredScore + " WHERE name = '" + candidate.name + "'");
                 break;
             case "cell2":
-                candidate.score2 = enteredScore;
+                $.post("http://localhost:8000", "UPDATE contestants SET score2 = " + enteredScore + " WHERE name = '" + candidate.name + "'");
                 break;
             case "cell3":
-                candidate.score3 = enteredScore;
+                $.post("http://localhost:8000", "UPDATE contestants SET score3 = " + enteredScore + " WHERE name = '" + candidate.name + "'");
                 break;
         }
         closeAllPopovers();
@@ -93,24 +100,9 @@ $(document).ready(function(){
     };
     
     function displayContestants() {
+        // Something is wrong with .empty()...
         $("#boardTbody").empty();
-        
-        contestants.sort(compareTotal);
-        contestants.reverse();
-        
-        for (i = 0; i < contestants.length; i++) {
-            var current = contestants[i];
-            $("#boardTbody").append(
-                $("<tr>" +
-                    "<td ><strong>" + (i + 1) + "</strong></td>" +
-                    "<td>" + current.name + "</td>" +
-                    "<td class='cell1' name='" + current.name + "' data-placement='bottom' data-toggle='popover' data-container='body' data-html='true'>" + current.score1 + "</td>" +
-                    "<td class='cell2' name='" + current.name + "' data-placement='bottom' data-toggle='popover' data-container='body' data-html='true'>" + current.score2 + "</td>" +
-                    "<td class='cell3' name='" + current.name + "' data-placement='bottom' data-toggle='popover' data-container='body' data-html='true'>" + current.score3 + "</td>" +
-                    "<td>" + current.total() + "</td>" +
-                "</tr>")
-            );
-        }
+        $.post("http://localhost:8000", "SELECT name, score1, score2, score3 FROM contestants", callback, "json");
     }
     
     function compareTotal(c1, c2) {
