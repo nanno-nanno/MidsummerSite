@@ -13,6 +13,8 @@ $(document).ready(function(){
     }
     
     var contestants = [];
+    
+    var reclick = false;
 
     var callback = function(data) {
         contestants = [];
@@ -32,8 +34,8 @@ $(document).ready(function(){
         for (i = 0; i < contestants.length; i++) {
             var current = contestants[i];
             $("#boardTbody").append(
-                $("<tr>" +
-                    "<td ><strong>" + (i + 1) + "</strong></td>" +
+                $("<tr style='display:none;'>" +
+                    "<td><strong>" + (i + 1) + "</strong></td>" +
                     "<td>" + current.name + "</td>" +
                     "<td class='cell1' name='" + current.name + "' data-placement='bottom' data-toggle='popover' data-container='body' data-html='true'>" + current.score1 + "</td>" +
                     "<td class='cell2' name='" + current.name + "' data-placement='bottom' data-toggle='popover' data-container='body' data-html='true'>" + current.score2 + "</td>" +
@@ -42,6 +44,10 @@ $(document).ready(function(){
                 "</tr>")
             );
         }
+        if (reclick) {
+            showRows();
+        }
+        reclick = false;
     }
     
     displayContestants();
@@ -96,15 +102,55 @@ $(document).ready(function(){
                 break;
         }
         closeAllPopovers();
+        reclick = true;
         displayContestants();
     };
     
-    function displayContestants() {
-        // Something is wrong with .empty()...
+    function displayContestants(showAll) {
         $("#boardTbody").empty();
         $.post("http://localhost:8000", "SELECT name, score1, score2, score3 FROM contestants", callback, "json");
     }
     
+    $("#showAll").click(function() {
+        displayNextRow();
+    });
+    
+    var nextWinner = 1;
+    
+    function displayNextRow() {
+        var tableRows = document.getElementById("boardTbody").rows;
+        if (nextWinner > tableRows.length) {
+            return;
+        }
+        tableRows[tableRows.length - nextWinner].style.display = "";
+        nextWinner++;
+        if (nextWinner > tableRows.length) {
+            document.getElementById("showAll").style.display = "none";
+        }
+    }
+    
+    $("#adminShowWinners").click(function() {
+        showRows();
+    });
+    
+    function showRows() {
+        var tableRows = document.getElementById("boardTbody").rows;
+        for (var i = tableRows.length - 1; i >= 0; i--) {
+            tableRows[i].style.display = "";
+        }
+    }
+    
+    function hideRows() {
+        var tableRows = document.getElementById("boardTbody").rows;
+        for (var i = tableRows.length - 1; i >= 0; i--) {
+            tableRows[i].style.display = "none";
+        }
+    }
+    
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     function compareTotal(c1, c2) {
         if (c1.total() < c2.total()) {
             return -1;

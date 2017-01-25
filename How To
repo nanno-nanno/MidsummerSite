@@ -1,7 +1,8 @@
 HOW TO
 
-1. Go to the Midsummer/scripts/ directory
+1. Go to the MidsummerSite/scripts/ directory
 2. Start the node server: node server.js
-3. Go to the Midsummer/ directory
+3. Go to the MidsummerSite/ directory
 4. Start the python server: python -m SimpleHTTPServer 8001
 5. Open Chrome, go to website: http://127.0.0.1:8001/html/index.html
+6. "Restart" (aka fiddle with it) the CORS-plugin in Chrome
