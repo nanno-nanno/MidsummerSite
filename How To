@@ -6,3 +6,5 @@ HOW TO
 4. Start the python server: python -m SimpleHTTPServer 8001
 5. Open Chrome, go to website: http://127.0.0.1:8001/html/index.html
 6. "Restart" (aka fiddle with it) the CORS-plugin in Chrome
+
+EXTRA: Have a look at https://github.com/typicode/hotel
