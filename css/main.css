@@ -6,3 +6,9 @@
 .btn {
     margin-bottom: 5px; 
 }
+
+.jumbotron {
+    background-image: url("../images/flowers2.jpg");
+    background-size: cover;
+    color: white
+}
